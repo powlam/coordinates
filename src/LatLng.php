@@ -4,24 +4,21 @@ declare(strict_types=1);
 
 namespace Powlam\Coordinates;
 
+use Powlam\Coordinates\Enums\Heading;
+use Powlam\Coordinates\Enums\Units;
+use Powlam\Coordinates\Interfaces\Moveable;
+
 /**
  * @internal
  */
-final class LatLng implements \Stringable
+final class LatLng implements \Stringable, Moveable
 {
     public function __construct(
         private float $latitude,
         private float $longitude
     ) {
-        // limit latitude to the range -90 to 90
-        $this->latitude = max(-90.0, min(90.0, $this->latitude));
-
-        // normalize longitude to the range -180 to 180
-        if ($this->longitude < -180.0) {
-            $this->longitude = fmod($this->longitude, 360.0) + 360.0;
-        } elseif ($this->longitude > 180.0) {
-            $this->longitude = fmod($this->longitude, 360.0) - 360.0;
-        }
+        $this->latitude = $this->limitedLatitude($this->latitude);
+        $this->longitude = $this->normalizedLongitude($this->longitude);
     }
 
     public function getLatitude(): float
@@ -80,5 +77,78 @@ final class LatLng implements \Stringable
             $data['latitude'],
             $data['longitude'],
         );
+    }
+
+    public function move(Heading $heading, float $distance, Units $units = Units::DEGREES): static
+    {
+        switch ($units) {
+            case Units::METERS:
+                return $this->moveInMeters($heading, $distance);
+            case Units::KILOMETERS:
+                return $this->moveInMeters($heading, $distance * 1000.0);
+            case Units::DEGREES:
+            default:
+                return $this->moveInDegrees($heading, $distance);
+        }
+    }
+
+    /**
+     * Limits latitude to the range -90 to 90
+     */
+    private function limitedLatitude(float $latitude): float
+    {
+        return max(-90.0, min(90.0, $latitude));
+    }
+
+    /**
+     * Normalizes longitude to the range -180 to 180
+     */
+    private function normalizedLongitude(float $longitude): float
+    {
+        if ($longitude < -180.0) {
+            return fmod($longitude, 360.0) + 360.0;
+        }
+
+        if ($longitude > 180.0) {
+            return fmod($longitude, 360.0) - 360.0;
+        }
+
+        return $longitude;
+    }
+
+    private function moveInDegrees(Heading $heading, float $distance): static
+    {
+        switch ($heading) {
+            case Heading::NORTH:
+                $this->latitude += $distance;
+                break;
+            case Heading::SOUTH:
+                $this->latitude -= $distance;
+                break;
+            case Heading::EAST:
+                $this->longitude += $distance;
+                break;
+            case Heading::WEST:
+                $this->longitude -= $distance;
+                break;
+            default:
+                throw new \InvalidArgumentException('Invalid heading');
+        }
+
+        $this->latitude = $this->limitedLatitude($this->latitude);
+        $this->longitude = $this->normalizedLongitude($this->longitude);
+
+        return $this;
+    }
+
+    private function moveInMeters(Heading $heading, float $distance): static
+    {
+        if ($heading === Heading::NORTH || $heading === Heading::SOUTH) {
+            $distanceInDegrees = $distance / 111319.9;
+        } else {
+            $distanceInDegrees = $distance / (111319.9 * cos(deg2rad($this->latitude)));
+        }
+
+        return $this->moveInDegrees($heading, $distanceInDegrees);
     }
 }

@@ -4,19 +4,27 @@ declare(strict_types=1);
 
 namespace Powlam\Coordinates;
 
+use Powlam\Coordinates\Enums\Heading;
+use Powlam\Coordinates\Enums\Units;
+use Powlam\Coordinates\Interfaces\Moveable;
+
 /**
  * @internal
  */
-final readonly class LatLngAltitude implements \Stringable
+final class LatLngAltitude implements \Stringable, Moveable
 {
-    private LatLng $latLng;
+    private readonly LatLng $latLng;
 
+    /**
+     * @param  float  $altitude  The altitude in meters. Zero is sea level.
+     */
     public function __construct(
         float $latitude,
         float $longitude,
         private float $altitude
     ) {
         $this->latLng = new LatLng($latitude, $longitude);
+        $this->altitude = $this->limitedAltitude($this->altitude);
     }
 
     public function getLatitude(): float
@@ -83,5 +91,49 @@ final readonly class LatLngAltitude implements \Stringable
             $data['longitude'],
             $data['altitude'],
         );
+    }
+
+    public function move(Heading $heading, float $distance, Units $units = Units::DEGREES): static
+    {
+        switch ($heading) {
+            case Heading::UP:
+            case Heading::DOWN:
+                if ($units === Units::DEGREES) {
+                    throw new \InvalidArgumentException('Cannot move up or down in degrees.');
+                }
+                if ($units === Units::KILOMETERS) {
+                    $distance *= 1000.0;
+                }
+
+                return $this->moveInMetersVertically($heading, $distance);
+            default:
+                $this->latLng->move($heading, $distance, $units);
+
+                return $this;
+        }
+    }
+
+    /**
+     * Limits the minimum altitude to the radius of the Earth.
+     */
+    private function limitedAltitude(float $altitude): float
+    {
+        return max(-6371000.0, $altitude);
+    }
+
+    private function moveInMetersVertically(Heading $heading, float $distance): static
+    {
+        switch ($heading) {
+            case Heading::UP:
+                $this->altitude += $distance;
+                break;
+            case Heading::DOWN:
+                $this->altitude -= $distance;
+                break;
+        }
+
+        $this->altitude = $this->limitedAltitude($this->altitude);
+
+        return $this;
     }
 }
