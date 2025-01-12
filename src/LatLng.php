@@ -6,6 +6,7 @@ namespace Powlam\Coordinates;
 
 use Powlam\Coordinates\Enums\Heading;
 use Powlam\Coordinates\Enums\Units;
+use Powlam\Coordinates\Helpers\FloatCompare;
 use Powlam\Coordinates\Interfaces\KnowsPlaces;
 use Powlam\Coordinates\Interfaces\Moveable;
 use Powlam\Coordinates\Traits\IsPlace;
@@ -37,7 +38,9 @@ final class LatLng implements \Stringable, KnowsPlaces, Moveable
 
     public function equals(self $other): bool
     {
-        return $this->latitude === $other->latitude && $this->longitude === $other->longitude;
+        return
+            FloatCompare::equals($this->latitude, $other->latitude) &&
+            FloatCompare::equals($this->longitude, $other->longitude);
     }
 
     public function __toString(): string
@@ -150,11 +153,11 @@ final class LatLng implements \Stringable, KnowsPlaces, Moveable
      */
     private function normalizedLongitude(float $longitude): float
     {
-        if ($longitude < -180.0) {
+        if (FloatCompare::lessThan($longitude, -180.0)) {
             return fmod($longitude, 360.0) + 360.0;
         }
 
-        if ($longitude > 180.0) {
+        if (FloatCompare::greaterThan($longitude, 180.0)) {
             return fmod($longitude, 360.0) - 360.0;
         }
 

@@ -6,6 +6,7 @@ namespace Powlam\Coordinates;
 
 use Powlam\Coordinates\Enums\Heading;
 use Powlam\Coordinates\Enums\Units;
+use Powlam\Coordinates\Helpers\FloatCompare;
 use Powlam\Coordinates\Interfaces\KnowsPlaces;
 use Powlam\Coordinates\Interfaces\Moveable;
 use Powlam\Coordinates\Traits\IsPlace;
@@ -50,7 +51,9 @@ final class LatLngAltitude implements \Stringable, KnowsPlaces, Moveable
 
     public function equals(self $other): bool
     {
-        return $this->latLng->equals($other->latLng) && $this->altitude === $other->altitude;
+        return
+            $this->latLng->equals($other->latLng) &&
+            FloatCompare::equals($this->altitude, $other->altitude);
     }
 
     public function __toString(): string
@@ -87,7 +90,7 @@ final class LatLngAltitude implements \Stringable, KnowsPlaces, Moveable
             'coordinates' => array_filter([
                 $this->latLng->getLongitude(),
                 $this->latLng->getLatitude(),
-                $this->altitude === 0.0 ? null : $this->altitude,
+                FloatCompare::equals($this->altitude, 0.0) ? null : $this->altitude,
             ], fn ($value): bool => $value !== null),
         ]);
     }
