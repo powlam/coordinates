@@ -13,6 +13,8 @@ use Powlam\Coordinates\Interfaces\Moveable;
  */
 final class LatLngAltitude implements \Stringable, Moveable
 {
+    public const float EARTH_RADIUS = 6371000.0;
+
     private readonly LatLng $latLng;
 
     /**
@@ -118,7 +120,7 @@ final class LatLngAltitude implements \Stringable, Moveable
      */
     private function limitedAltitude(float $altitude): float
     {
-        return max(-6371000.0, $altitude);
+        return max(-self::EARTH_RADIUS, $altitude);
     }
 
     private function moveInMetersVertically(Heading $heading, float $distance): static

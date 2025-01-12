@@ -161,8 +161,8 @@ it('respects the longitude limits in every movement', function (): void {
 });
 
 it('respects the altitude limits in every movement', function (): void {
-    expect((new LatLngAltitude(0.0, 0.0, -6371000.0))->move(Heading::DOWN, 100.0, Units::METERS)->getAltitude())->toEqualWithDelta(-6371000.0, 0.01);
-    expect((new LatLngAltitude(0.0, 0.0, -6371000.0))->move(Heading::UP, -100.0, Units::METERS)->getAltitude())->toEqualWithDelta(-6371000.0, 0.01);
+    expect((new LatLngAltitude(0.0, 0.0, -LatLngAltitude::EARTH_RADIUS))->move(Heading::DOWN, 100.0, Units::METERS)->getAltitude())->toEqualWithDelta(-LatLngAltitude::EARTH_RADIUS, 0.01);
+    expect((new LatLngAltitude(0.0, 0.0, -LatLngAltitude::EARTH_RADIUS))->move(Heading::UP, -100.0, Units::METERS)->getAltitude())->toEqualWithDelta(-LatLngAltitude::EARTH_RADIUS, 0.01);
 });
 
 it('can move the point repeatedly', function (): void {
