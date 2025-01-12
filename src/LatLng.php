@@ -6,13 +6,17 @@ namespace Powlam\Coordinates;
 
 use Powlam\Coordinates\Enums\Heading;
 use Powlam\Coordinates\Enums\Units;
+use Powlam\Coordinates\Interfaces\KnowsPlaces;
 use Powlam\Coordinates\Interfaces\Moveable;
+use Powlam\Coordinates\Traits\IsPlace;
 
 /**
  * @internal
  */
-final class LatLng implements \Stringable, Moveable
+final class LatLng implements \Stringable, KnowsPlaces, Moveable
 {
+    use IsPlace;
+
     public function __construct(
         private float $latitude,
         private float $longitude
@@ -29,6 +33,11 @@ final class LatLng implements \Stringable, Moveable
     public function getLongitude(): float
     {
         return $this->longitude;
+    }
+
+    public function equals(self $other): bool
+    {
+        return $this->latitude === $other->latitude && $this->longitude === $other->longitude;
     }
 
     public function __toString(): string
@@ -92,30 +101,6 @@ final class LatLng implements \Stringable, Moveable
         }
     }
 
-    /**
-     * Limits latitude to the range -90 to 90
-     */
-    private function limitedLatitude(float $latitude): float
-    {
-        return max(-90.0, min(90.0, $latitude));
-    }
-
-    /**
-     * Normalizes longitude to the range -180 to 180
-     */
-    private function normalizedLongitude(float $longitude): float
-    {
-        if ($longitude < -180.0) {
-            return fmod($longitude, 360.0) + 360.0;
-        }
-
-        if ($longitude > 180.0) {
-            return fmod($longitude, 360.0) - 360.0;
-        }
-
-        return $longitude;
-    }
-
     private function moveInDegrees(Heading $heading, float $distance): static
     {
         switch ($heading) {
@@ -150,5 +135,29 @@ final class LatLng implements \Stringable, Moveable
         }
 
         return $this->moveInDegrees($heading, $distanceInDegrees);
+    }
+
+    /**
+     * Limits latitude to the range -90 to 90
+     */
+    private function limitedLatitude(float $latitude): float
+    {
+        return max(-90.0, min(90.0, $latitude));
+    }
+
+    /**
+     * Normalizes longitude to the range -180 to 180
+     */
+    private function normalizedLongitude(float $longitude): float
+    {
+        if ($longitude < -180.0) {
+            return fmod($longitude, 360.0) + 360.0;
+        }
+
+        if ($longitude > 180.0) {
+            return fmod($longitude, 360.0) - 360.0;
+        }
+
+        return $longitude;
     }
 }

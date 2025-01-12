@@ -6,13 +6,17 @@ namespace Powlam\Coordinates;
 
 use Powlam\Coordinates\Enums\Heading;
 use Powlam\Coordinates\Enums\Units;
+use Powlam\Coordinates\Interfaces\KnowsPlaces;
 use Powlam\Coordinates\Interfaces\Moveable;
+use Powlam\Coordinates\Traits\IsPlace;
 
 /**
  * @internal
  */
-final class LatLngAltitude implements \Stringable, Moveable
+final class LatLngAltitude implements \Stringable, KnowsPlaces, Moveable
 {
+    use IsPlace;
+
     public const float EARTH_RADIUS = 6371000.0;
 
     private readonly LatLng $latLng;
@@ -42,6 +46,11 @@ final class LatLngAltitude implements \Stringable, Moveable
     public function getAltitude(): float
     {
         return $this->altitude;
+    }
+
+    public function equals(self $other): bool
+    {
+        return $this->latLng->equals($other->latLng) && $this->altitude === $other->altitude;
     }
 
     public function __toString(): string
@@ -115,14 +124,6 @@ final class LatLngAltitude implements \Stringable, Moveable
         }
     }
 
-    /**
-     * Limits the minimum altitude to the radius of the Earth.
-     */
-    private function limitedAltitude(float $altitude): float
-    {
-        return max(-self::EARTH_RADIUS, $altitude);
-    }
-
     private function moveInMetersVertically(Heading $heading, float $distance): static
     {
         switch ($heading) {
@@ -137,5 +138,13 @@ final class LatLngAltitude implements \Stringable, Moveable
         $this->altitude = $this->limitedAltitude($this->altitude);
 
         return $this;
+    }
+
+    /**
+     * Limits the minimum altitude to the radius of the Earth.
+     */
+    private function limitedAltitude(float $altitude): float
+    {
+        return max(-self::EARTH_RADIUS, $altitude);
     }
 }
