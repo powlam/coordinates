@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Powlam\Coordinates;
 
-use Powlam\Coordinates\Helpers\FloatCompare;
 use Powlam\Coordinates\Interfaces\KnowsPlaces;
 use Powlam\Coordinates\Traits\IsPlace;
+use Powlam\Coordinates\Utils\FloatCompare;
 
 /**
  * @internal

@@ -6,10 +6,10 @@ namespace Powlam\Coordinates;
 
 use Powlam\Coordinates\Enums\Heading;
 use Powlam\Coordinates\Enums\Units;
-use Powlam\Coordinates\Helpers\FloatCompare;
 use Powlam\Coordinates\Interfaces\KnowsPlaces;
 use Powlam\Coordinates\Interfaces\Movable;
 use Powlam\Coordinates\Traits\IsPlace;
+use Powlam\Coordinates\Utils\FloatCompare;
 
 /**
  * @internal

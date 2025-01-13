@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 use Powlam\Coordinates\Enums\Heading;
 use Powlam\Coordinates\Enums\Units;
-use Powlam\Coordinates\Helpers\FloatCompare;
 use Powlam\Coordinates\LatLng;
+use Powlam\Coordinates\Utils\FloatCompare;
 
 it('can move the point north', function (): void {
     $latLng = (new LatLng(1.23, 4.56))->move(Heading::NORTH, 1.0);

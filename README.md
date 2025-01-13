@@ -108,4 +108,21 @@ $northernHemisphere = Place::NORTHERN_HEMISPHERE->get();
 $northernHemisphere->contains(new LatLng(5, 5)); // returns true
 ```
 
+# Utils
+
+## FloatCompare
+
+Testing floating point values for equality [is problematic](https://www.php.net/manual/en/language.types.float.php), due to the way that they are represented internally. To test floating point values for equality, an upper bound on the relative error due to rounding is used. This delta is the smallest acceptable difference in calculations.
+
+The methods implemented into the **FloatCompare** class allow comparing float numbers due to an internal delta value.
+
+```php
+use Powlam\Coordinates\Utils\FloatCompare;
+
+FloatCompare::equals(1.0, 1.000001); // returns true
+
+FloatCompare::equalOrLessThan(1.0, 0.9999999) // returns true
+FloatCompare::equalOrLessThan(1.0, 2.0) // returns true
+```
+
 **Coordinates for PHP** was created by **[Paul Albandoz](https://github.com/powlam)** under the **[MIT license](https://opensource.org/licenses/MIT)**.

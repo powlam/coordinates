@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Powlam\Coordinates\Helpers\FloatCompare;
+use Powlam\Coordinates\Utils\FloatCompare;
 
 it('identifies that two floats are equal', function (): void {
     expect(FloatCompare::equals(1.0, 1.0))->toBeTrue();

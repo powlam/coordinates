@@ -1,6 +1,6 @@
 <?php
 
-namespace Powlam\Coordinates\Helpers;
+namespace Powlam\Coordinates\Utils;
 
 class FloatCompare
 {
