@@ -38,7 +38,7 @@ A LatLngBounds instance represents a rectangle in geographical coordinates, incl
 
 ## Movement
 
-Both **LatLng** and **LatLngAltitude** points are moveable, so they can be moved in any direction using the **move** method.
+Both **LatLng** and **LatLngAltitude** points are movable, so they can be moved in any direction using the **move** method.
 
 ```php
 use Powlam\Coordinates\Enums\Heading;

@@ -8,13 +8,13 @@ use Powlam\Coordinates\Enums\Heading;
 use Powlam\Coordinates\Enums\Units;
 use Powlam\Coordinates\Helpers\FloatCompare;
 use Powlam\Coordinates\Interfaces\KnowsPlaces;
-use Powlam\Coordinates\Interfaces\Moveable;
+use Powlam\Coordinates\Interfaces\Movable;
 use Powlam\Coordinates\Traits\IsPlace;
 
 /**
  * @internal
  */
-final class LatLngAltitude implements \Stringable, KnowsPlaces, Moveable
+final class LatLngAltitude implements \Stringable, KnowsPlaces, Movable
 {
     use IsPlace;
 
