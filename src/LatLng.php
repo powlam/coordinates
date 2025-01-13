@@ -10,6 +10,8 @@ use Powlam\Coordinates\Interfaces\KnowsPlaces;
 use Powlam\Coordinates\Interfaces\Movable;
 use Powlam\Coordinates\Traits\IsPlace;
 use Powlam\Coordinates\Utils\FloatCompare;
+use Powlam\Coordinates\Utils\Latitude;
+use Powlam\Coordinates\Utils\Longitude;
 
 /**
  * @internal
@@ -132,9 +134,9 @@ final class LatLng implements \Stringable, KnowsPlaces, Movable
     private function moveInMeters(Heading $heading, float $distance): static
     {
         if ($heading === Heading::NORTH || $heading === Heading::SOUTH) {
-            $distanceInDegrees = $distance / 111319.9;
+            $distanceInDegrees = Latitude::degreesFromMeters($distance);
         } else {
-            $distanceInDegrees = $distance / (111319.9 * cos(deg2rad($this->latitude)));
+            $distanceInDegrees = Longitude::degreesFromMeters($distance, $this->latitude);
         }
 
         return $this->moveInDegrees($heading, $distanceInDegrees);

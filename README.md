@@ -129,13 +129,13 @@ use Powlam\Coordinates\Utils\Latitude;
 use Powlam\Coordinates\Utils\Longitude;
 
 Latitude::metersPerDegree(); // returns 111319.9
-Latitude::degreesFromKilometers(111.3199); // returns 1.0
+Latitude::degreesFromKilometers(Latitude::KILOMETERS_PER_DEGREE); // returns 1.0
 
 Longitude::metersPerDegree(latitudeDegrees: 0.0); // returns 111319.9
 Longitude::metersPerDegree(latitudeDegrees: -45.0); // returns 78715.056171
 Longitude::metersPerDegree(latitudeDegrees: -45.0); // returns 78715.056171
-Longitude::degreesFromMeters(111319.9, latitudeDegrees: 0.0); // returns 1.0
-Longitude::degreesFromMeters(111319.9, latitudeDegrees: 90.0); // returns INF
+Longitude::degreesFromMeters(Longitude::METERS_PER_DEGREE_AT_EQUATOR, latitudeDegrees: 0.0); // returns 1.0
+Longitude::degreesFromMeters(Longitude::METERS_PER_DEGREE_AT_EQUATOR, latitudeDegrees: 90.0); // returns INF
 Longitude::kilometersFromDegrees(1.0, latitudeDegrees: -45.0); // returns 78.715056
 ```
 

@@ -16,7 +16,7 @@ class Longitude
             return INF;
         }
 
-        return $meters / (self::METERS_PER_DEGREE_AT_EQUATOR * cos(deg2rad($latitudeDegrees)));
+        return $meters / self::metersPerDegree($latitudeDegrees);
     }
 
     public static function degreesFromKilometers(float $kilometers, float $latitudeDegrees): float
@@ -25,26 +25,31 @@ class Longitude
             return INF;
         }
 
-        return $kilometers / (self::KILOMETERS_PER_DEGREE_AT_EQUATOR * cos(deg2rad($latitudeDegrees)));
+        return $kilometers / self::kilometersPerDegree($latitudeDegrees);
     }
 
     public static function metersPerDegree(float $latitudeDegrees): float
     {
-        return self::METERS_PER_DEGREE_AT_EQUATOR * cos(deg2rad($latitudeDegrees));
+        return self::calculateLinearDistanceFromLatitudeDegrees($latitudeDegrees, self::METERS_PER_DEGREE_AT_EQUATOR);
     }
 
     public static function kilometersPerDegree(float $latitudeDegrees): float
     {
-        return self::KILOMETERS_PER_DEGREE_AT_EQUATOR * cos(deg2rad($latitudeDegrees));
+        return self::calculateLinearDistanceFromLatitudeDegrees($latitudeDegrees, self::KILOMETERS_PER_DEGREE_AT_EQUATOR);
     }
 
     public static function metersFromDegrees(float $degrees, float $latitudeDegrees): float
     {
-        return $degrees * self::METERS_PER_DEGREE_AT_EQUATOR * cos(deg2rad($latitudeDegrees));
+        return $degrees * self::metersPerDegree($latitudeDegrees);
     }
 
     public static function kilometersFromDegrees(float $degrees, float $latitudeDegrees): float
     {
-        return $degrees * self::KILOMETERS_PER_DEGREE_AT_EQUATOR * cos(deg2rad($latitudeDegrees));
+        return $degrees * self::kilometersPerDegree($latitudeDegrees);
+    }
+
+    private static function calculateLinearDistanceFromLatitudeDegrees(float $latitudeDegrees, float $unitsPerDegree): float
+    {
+        return $unitsPerDegree * cos(deg2rad($latitudeDegrees));
     }
 }
