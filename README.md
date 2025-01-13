@@ -13,6 +13,8 @@ This package provides a handful of tools to work with **coordinates** the same w
 
 > **Requires [PHP 8.3+](https://php.net/releases/)**
 
+> Note: This is still a work in progress...
+
 # Classes
 
 ## LatLng class
@@ -27,6 +29,10 @@ A LatLng is a point in geographic coordinates: latitude and longitude. Both para
 A LatLngAltitude is a 3D point in geographic coordinates: latitude, longitude, and altitude.
 
 * **Altitude** is measured in meters. Positive values indicate heights above ground level, and negative values indicate depths below the ground surface.
+
+## LatLngBounds class
+
+A LatLngBounds instance represents a rectangle in geographical coordinates, including one that crosses the 180-degree longitudinal meridian.
 
 # Features
 
@@ -50,6 +56,56 @@ $latLngAlt = (new LatLngAltitude(1.23, 4.56, 0.0))
 // at this point $latLngAlt is at (10.23, 19.56, 70.0)
 ```
 
-⚡️ This is still a work in progress...
+## Interaction between bounds
+
+**LatLngBounds** classes can interact with each other:
+
+```php
+use Powlam\Coordinates\LatLng;
+use Powlam\Coordinates\LatLngBounds;
+
+$bounds = new LatLngBounds(new LatLng(1, 1), new LatLng(10, 10));
+// $bounds refers to (1, 1|10, 10)
+
+$bounds->intersects(new LatLngBounds(new LatLng(5, 5), new LatLng(15, 15))); // returns true
+$bounds->intersects(new LatLngBounds(new LatLng(15, 15), new LatLng(20, 20))); // returns false
+
+$union = $bounds->union(new LatLngBounds(new LatLng(5, 6), new LatLng(15, 16)));
+// $union refers to (1, 1|15, 16)
+```
+
+Also a **LatLngBounds** can interact with a **LatLng** point:
+
+```php
+use Powlam\Coordinates\LatLng;
+use Powlam\Coordinates\LatLngBounds;
+
+$bounds = new LatLngBounds(new LatLng(1, 1), new LatLng(10, 10));
+// $bounds refers to (1, 1|10, 10)
+
+$bounds->contains(new LatLng(5, 5)); // returns true
+$bounds->contains(new LatLng(-5, 5)); // returns false
+
+$bounds->extend(new LatLng(15, 16));
+// at this point $bounds has been extended to (1, 1|15, 16)
+```
+
+Unions and extensions are always done in **the closest way possible**. When talking about the **longitude**, usually there are 2 ways of making the join: towards west or towards east. This library selects the closest one or, in case of a tie, towards east.
+
+# Places
+
+There is a list of geographical points, lines and areas into the **Place** enum.
+
+Through the **get()** method you can retrieve the underlying **LatLng**, **LatLngAltitude** or **LatLngBounds** object that represents it.
+
+Each of them can be used as any other **LatLng**, **LatLngAltitude** or **LatLngBounds** object.
+
+```php
+use Powlam\Coordinates\Enums\Place;
+
+$northernHemisphere = Place::NORTHERN_HEMISPHERE->get();
+
+$northernHemisphere->contains(new LatLng(5, 5)); // returns true
+```
 
 **Coordinates for PHP** was created by **[Paul Albandoz](https://github.com/powlam)** under the **[MIT license](https://opensource.org/licenses/MIT)**.
