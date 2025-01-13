@@ -110,6 +110,27 @@ $northernHemisphere->contains(new LatLng(5, 5)); // returns true
 
 # Utils
 
+## Latitude and Longitude
+
+These classes facilitate converting between degrees (the units used in this project) and meters or kilometers in both directions.
+
+This is especially useful in the case of longitudes, because the ratio changes depending on the latitude.
+
+```php
+use Powlam\Coordinates\Utils\Latitude;
+use Powlam\Coordinates\Utils\Longitude;
+
+Latitude::metersPerDegree(); // returns 111319.9
+Latitude::degreesFromKilometers(111.3199); // returns 1.0
+
+Longitude::metersPerDegree(latitudeDegrees: 0.0); // returns 111319.9
+Longitude::metersPerDegree(latitudeDegrees: -45.0); // returns 78715.056171
+Longitude::metersPerDegree(latitudeDegrees: -45.0); // returns 78715.056171
+Longitude::degreesFromMeters(111319.9, latitudeDegrees: 0.0); // returns 1.0
+Longitude::degreesFromMeters(111319.9, latitudeDegrees: 90.0); // returns INF
+Longitude::kilometersFromDegrees(1.0, latitudeDegrees: -45.0); // returns 78.715056
+```
+
 ## FloatCompare
 
 Testing floating point values for equality [is problematic](https://www.php.net/manual/en/language.types.float.php), due to the way that they are represented internally. To test floating point values for equality, an upper bound on the relative error due to rounding is used. This delta is the smallest acceptable difference in calculations.
