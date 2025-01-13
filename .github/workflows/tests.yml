@@ -51,7 +51,11 @@ jobs:
           fi
 
     - name: Spelling Check
-      run: php ./vendor/bin/peck
+      shell: bash
+      run: |
+          if [[ "$RUNNER_OS" == "Linux" || "$RUNNER_OS" == "macOS" ]]; then
+            php ./vendor/bin/peck
+          fi
 
     - name: Integration Tests
       run: php ./vendor/bin/pest
