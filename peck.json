@@ -1,0 +1,15 @@
+{
+    "preset": "base",
+    "ignore": {
+        "words": [
+            "php",
+            "phpstan",
+            "phpunit",
+            "readme"
+        ],
+        "paths": [
+            ".*",
+            "vendor"
+        ]
+    }
+}
