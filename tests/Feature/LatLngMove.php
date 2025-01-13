@@ -129,7 +129,7 @@ it('respects the longitude limits in every movement', function (): void {
     expect((new LatLng(0.0, -180.0))->move(Heading::WEST, 111.3199, Units::KILOMETERS)->getLongitude())->toEqualWithDelta(179.0, FloatCompare::COMPARISON_TOLERANCE);
 });
 
-it('throws an exception when moving with towards an invalid heading', function (): void {
+it('throws an exception when moving towards an invalid heading', function (): void {
     (new LatLng(1.23, 4.56))->move(Heading::UP, 1.0);
 })->throws(InvalidArgumentException::class);
 

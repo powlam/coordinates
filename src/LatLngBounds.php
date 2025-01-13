@@ -4,14 +4,18 @@ declare(strict_types=1);
 
 namespace Powlam\Coordinates;
 
+use Powlam\Coordinates\Enums\Heading;
+use Powlam\Coordinates\Enums\Units;
 use Powlam\Coordinates\Interfaces\KnowsPlaces;
+use Powlam\Coordinates\Interfaces\Movable;
 use Powlam\Coordinates\Traits\IsPlace;
 use Powlam\Coordinates\Utils\FloatCompare;
+use Powlam\Coordinates\Utils\Longitude;
 
 /**
  * @internal
  */
-final class LatLngBounds implements \Stringable, KnowsPlaces
+final class LatLngBounds implements \Stringable, KnowsPlaces, Movable
 {
     use IsPlace;
 
@@ -234,6 +238,25 @@ final class LatLngBounds implements \Stringable, KnowsPlaces
             LatLng::fromArray($southwest),
             LatLng::fromArray($northeast),
         );
+    }
+
+    public function move(Heading $heading, float $distance, Units $units = Units::DEGREES): static
+    {
+        // if moving towards east or west and using (kilo)meters, the corresponding degrees will be calculated based on the midpoint latitude of the area
+        if (in_array($heading, [Heading::EAST, Heading::WEST], true) && in_array($units, [Units::METERS, Units::KILOMETERS], true)) {
+            $midpointLatitude = ($this->getSouth() + $this->getNorth()) / 2.0;
+            if ($units === Units::METERS) {
+                $distance = Longitude::degreesFromMeters($distance, $midpointLatitude);
+            } else {
+                $distance = Longitude::degreesFromKilometers($distance, $midpointLatitude);
+            }
+            $units = Units::DEGREES;
+        }
+
+        $this->southwest->move($heading, $distance, $units);
+        $this->northeast->move($heading, $distance, $units);
+
+        return $this;
     }
 
     public function contains(LatLng $latLng): bool

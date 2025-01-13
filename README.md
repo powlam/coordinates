@@ -56,6 +56,14 @@ $latLngAlt = (new LatLngAltitude(1.23, 4.56, 0.0))
 // at this point $latLngAlt is at (10.23, 19.56, 70.0)
 ```
 
+Note: Latitude movements stop when reaching the North or South Pole.
+
+### Moving areas
+
+The **LatLngBounds** rectangles are also movable; the entire area is moved at once.
+
+When moving a **LatLngBounds** rectangle towards east or west using meters or kilometers, the conversion between distance and degrees depends on the latitude. The corresponding degrees will be calculated based on the midpoint latitude of the area.
+
 ## Interaction between bounds
 
 **LatLngBounds** classes can interact with each other:
