@@ -13,8 +13,6 @@ This package provides a handful of tools to work with **coordinates** the same w
 
 > **Requires [PHP 8.3+](https://php.net/releases/)**
 
-> Note: This is still a work in progress...
-
 # Classes
 
 ## LatLng class
@@ -120,7 +118,7 @@ $northernHemisphere->contains(new LatLng(5, 5)); // returns true
 
 ## Latitude and Longitude
 
-These classes facilitate converting between degrees (the units used in this project) and meters or kilometers in both directions.
+These classes facilitate converting between degrees and meters or kilometers in both directions.
 
 This is especially useful in the case of longitudes, because the ratio changes depending on the latitude.
 
@@ -153,5 +151,10 @@ FloatCompare::equals(1.0, 1.000001); // returns true
 FloatCompare::equalOrLessThan(1.0, 0.9999999) // returns true
 FloatCompare::equalOrLessThan(1.0, 2.0) // returns true
 ```
+------
+
+📚 The full API of this library is available in [this file](docs/API_DOCUMENTATION.md).
+
+------
 
 **Coordinates for PHP** was created by **[Paul Albandoz](https://github.com/powlam)** under the **[MIT license](https://opensource.org/licenses/MIT)**.

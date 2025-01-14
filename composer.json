@@ -55,6 +55,7 @@
             "@test:types",
             "@test:typos",
             "@test:unit"
-        ]
+        ],
+        "generate-api": "@php docs/generate-api.php"
     }
 }
