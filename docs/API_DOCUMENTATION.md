@@ -10,6 +10,97 @@
 
 ------
 
+## Enum: Powlam\Coordinates\Enums\Heading
+
+#### Values
+
+* `NORTH`
+* `SOUTH`
+* `EAST`
+* `WEST`
+* `UP`
+* `DOWN`
+
+
+
+------
+
+## Enum: Powlam\Coordinates\Enums\Place
+
+#### Values
+
+* `EARTH_CENTER`
+* `NORTH_POLE`
+* `NORTHERN_HEMISPHERE`
+* `EQUATOR`
+* `SOUTHERN_HEMISPHERE`
+* `SOUTH_POLE`
+* `ARCTIC`
+* `ARCTIC_CIRCLE`
+* `NORTH_TEMPERATE_ZONE`
+* `TROPIC_OF_CANCER`
+* `TROPICS`
+* `TROPIC_OF_CAPRICORN`
+* `SOUTH_TEMPERATE_ZONE`
+* `ANTARCTIC_CIRCLE`
+* `ANTARCTIC`
+* `PRIME_MERIDIAN`
+* `INTERNATIONAL_DATE_LINE`
+* `WESTERN_HEMISPHERE`
+* `EASTERN_HEMISPHERE`
+
+### Method: name
+
+```php
+Powlam\Coordinates\Enums\Place::name(): string
+```
+
+### Method: get
+
+```php
+Powlam\Coordinates\Enums\Place::get(): Powlam\Coordinates\LatLng|Powlam\Coordinates\LatLngAltitude|Powlam\Coordinates\LatLngBounds
+```
+
+
+
+------
+
+## Enum: Powlam\Coordinates\Enums\Units
+
+#### Values
+
+* `DEGREES`
+* `METERS`
+* `KILOMETERS`
+
+
+
+------
+
+## Interface: Powlam\Coordinates\Interfaces\KnowsPlaces
+
+### Method: isPlace
+
+```php
+Powlam\Coordinates\Interfaces\KnowsPlaces::isPlace(Powlam\Coordinates\Enums\Place $place): bool
+```
+
+
+
+------
+
+## Interface: Powlam\Coordinates\Interfaces\Movable
+
+### Method: move
+
+```php
+Powlam\Coordinates\Interfaces\Movable::move(Powlam\Coordinates\Enums\Heading $heading, float $distance, Powlam\Coordinates\Enums\Units $units = \Powlam\Coordinates\Enums\Units::DEGREES): static
+```
+
+
+
+------
+
 ## Class: Powlam\Coordinates\LatLng
 
 ```php
@@ -17,6 +108,16 @@
  * @internal
  */
 ```
+
+#### Implements
+
+* Stringable
+* Powlam\Coordinates\Interfaces\KnowsPlaces
+* Powlam\Coordinates\Interfaces\Movable
+
+#### Uses Traits
+
+* Powlam\Coordinates\Traits\IsPlace
 
 ### Method: __construct
 
@@ -107,6 +208,20 @@ Powlam\Coordinates\LatLng::isPlace(Powlam\Coordinates\Enums\Place $place): bool
  * @internal
  */
 ```
+
+#### Implements
+
+* Stringable
+* Powlam\Coordinates\Interfaces\KnowsPlaces
+* Powlam\Coordinates\Interfaces\Movable
+
+#### Uses Traits
+
+* Powlam\Coordinates\Traits\IsPlace
+
+#### Constants
+
+* `EARTH_RADIUS` = 6371000.0
 
 ### Method: __construct
 
@@ -206,6 +321,16 @@ Powlam\Coordinates\LatLngAltitude::isPlace(Powlam\Coordinates\Enums\Place $place
  * @internal
  */
 ```
+
+#### Implements
+
+* Stringable
+* Powlam\Coordinates\Interfaces\KnowsPlaces
+* Powlam\Coordinates\Interfaces\Movable
+
+#### Uses Traits
+
+* Powlam\Coordinates\Traits\IsPlace
 
 ### Method: __construct
 
@@ -441,7 +566,23 @@ Powlam\Coordinates\LatLngBounds::isPlace(Powlam\Coordinates\Enums\Place $place):
 
 ------
 
+## Trait: Powlam\Coordinates\Traits\IsPlace
+
+### Method: isPlace
+
+```php
+Powlam\Coordinates\Traits\IsPlace::isPlace(Powlam\Coordinates\Enums\Place $place): bool
+```
+
+
+
+------
+
 ## Class: Powlam\Coordinates\Utils\FloatCompare
+
+#### Constants
+
+* `COMPARISON_TOLERANCE` = 1.0E-6
 
 ### Method: equals
 
@@ -478,6 +619,11 @@ Powlam\Coordinates\Utils\FloatCompare::lessThan(float $a, float $b): bool
 ------
 
 ## Class: Powlam\Coordinates\Utils\Latitude
+
+#### Constants
+
+* `METERS_PER_DEGREE` = 111319.9
+* `KILOMETERS_PER_DEGREE` = 111.3199
 
 ### Method: degreesFromMeters
 
@@ -520,6 +666,11 @@ Powlam\Coordinates\Utils\Latitude::kilometersFromDegrees(float $degrees): float
 ------
 
 ## Class: Powlam\Coordinates\Utils\Longitude
+
+#### Constants
+
+* `METERS_PER_DEGREE_AT_EQUATOR` = 111319.9
+* `KILOMETERS_PER_DEGREE_AT_EQUATOR` = 111.3199
 
 ### Method: degreesFromMeters
 
